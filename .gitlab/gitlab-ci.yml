@@ -1,0 +1,7 @@
+stages:
+  - compliance
+  - build
+  - test
+  - deploy
+  - app-test
+  - cleanup

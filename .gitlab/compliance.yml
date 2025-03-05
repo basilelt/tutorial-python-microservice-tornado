@@ -1,0 +1,13 @@
+docker-lint:
+  stage: compliance
+  image: hadolint/hadolint:v2.12.0-alpine
+  script:
+    - hadolint 
+
+ansible-lint:
+  stage: compliance
+  image: alpine/ansible:2.18.1
+  script:
+    - pip install ansible-lint
+    - ansible-lint 
+
