@@ -14,6 +14,6 @@ build-image:
       echo "${SSL_CERTIFICATE}" >> /kaniko/ssl/certs/ca-certificates.crt
   script:
     - /kaniko/executor
-      --context "${CI_PROJECT_DIR}/"
-      --dockerfile "${CI_PROJECT_DIR}/"
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/.gitlab/docker/python/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${TAG}"
