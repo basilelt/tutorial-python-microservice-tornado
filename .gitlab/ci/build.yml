@@ -1,7 +1,8 @@
 build-image:
   stage: build
-  image: gcr.io/kaniko-project/executor:v1.23.2-debug
-  entrypoint: [""]
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
   variables:
     TAG: $CI_COMMIT_REF_SLUG
   rules:
