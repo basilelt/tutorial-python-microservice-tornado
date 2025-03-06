@@ -1,0 +1,6 @@
+python-type-check:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  script:
+    - mypy ./addrservice ./tests
+
