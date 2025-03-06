@@ -10,3 +10,4 @@ python-type-check:
         TAG: $CI_COMMIT_TAG
   script:
     - mypy ./addrservice ./tests
+
