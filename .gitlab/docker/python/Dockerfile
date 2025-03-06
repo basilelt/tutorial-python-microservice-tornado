@@ -7,5 +7,5 @@ WORKDIR /app
 COPY src /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip==25.0.1 pip --no-cache-dir && \
+RUN pip install --upgrade pip==25.0.1 --no-cache-dir && \
     pip install -r requirements.txt --no-cache-dir
