@@ -1,3 +1,22 @@
+docker-security-scan:
+  stage: test
+  image: 
+    name: aquasec/trivy:0.60.0
+    entrypoint: [""]
+  variables:
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+      variables:  
+        TAG: $CI_COMMIT_TAG
+  before_script:
+    - echo "${SSL_CERTIFICATE}" >> /etc/ssl/certs/ca-certificates.crt
+  script:
+    - trivy registry login ${CI_REGISTRY} --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD}
+    - trivy image "${CI_REGISTRY_IMAGE}:${TAG}" --no-progress --severity CRITICAL --exit-code 1
+    - trivy image "${CI_REGISTRY_IMAGE}:${TAG}" --no-progress --severity HIGH --exit-code 0
+
 python-type-check:
   stage: test
   image: ${CI_REGISTRY_IMAGE}:${TAG}
@@ -12,3 +31,111 @@ python-type-check:
   script:
     - cd /app
     - mypy ./addrservice ./tests
+
+python-linter:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  variables:
+    GIT_STRATEGY: none
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+      variables:  
+        TAG: $CI_COMMIT_TAG
+  script:
+    - cd /app
+    - flake8 ./addrservice ./tests
+
+python-unit-test:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  variables:
+    GIT_STRATEGY: none
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+      variables:  
+        TAG: $CI_COMMIT_TAG
+  script:
+    - cd /app
+    - python -m unittest discover tests -p '*_test.py'
+
+python-code-coverage:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  variables:
+    GIT_STRATEGY: none
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+      variables:  
+        TAG: $CI_COMMIT_TAG
+  script:
+    - cd /app
+    - coverage run --source=addrservice --branch -m unittest discover tests -p '*_test.py'
+    - coverage run --source=addrservice --branch ./run.py test
+    - coverage html
+  artifacts:
+    paths:
+      - /coverage-reports/htmlcov
+    reports:
+      html: /app/htmlcov/index.html
+
+# serve-coverage-report:
+#   stage: test
+#   image: alpine/ansible:2.18.1
+#   variables:
+#     GIT_STRATEGY: none
+#     URL: http://coverage.$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+#   needs:
+#     - python-code-coverage
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "develop"'
+#       variables:
+#         ENVIRONMENT: integration
+#     - if: '$CI_COMMIT_BRANCH == "main"'
+#       variables:
+#         ENVIRONMENT: preproduction
+#     - if: '$CI_COMMIT_TAG'
+#       variables:  
+#         TAG: $CI_COMMIT_TAG
+#         ENVIRONMENT: production
+#         URL: http://coverage.$KUBE_DOMAIN
+#   script:
+#     - 
+#   environment:
+#     name: $ENVIRONMENT
+#     url: $URL
+
+# serve-coverage-report-review:
+#   stage: test
+#   image: alpine/ansible:2.18.1
+#   variables:
+#     GIT_STRATEGY: none
+#     URL: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+#   needs:
+#     - python-code-coverage
+#   rules:
+#     rules:
+#       - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
+#   script:
+#     - 
+#   environment:
+#     name: review/$CI_COMMIT_REF_SLUG
+#     url: http://coverage.$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+#     on_stop: stop-review-coverage
+
+# stop-review-coverage:
+#   stage: test
+#   image: alpine/ansible:2.18.1
+#   variables:
+#     TAG: $CI_COMMIT_REF_SLUG
+#   script:
+#     - 
+#   environment:
+#     name: review/$CI_COMMIT_REF_SLUG
+#     action: stop
+#   when: manual

@@ -3,13 +3,3 @@ docker-lint:
   image: hadolint/hadolint:v2.12.0-alpine
   script:
     - hadolint ${CI_PROJECT_DIR}/.gitlab/docker/python/Dockerfile
-
-
-
-# ansible-lint:
-#   stage: compliance
-#   image: alpine/ansible:2.18.1
-#   script:
-#     - pip install ansible-lint
-#     - ansible-lint 
-
