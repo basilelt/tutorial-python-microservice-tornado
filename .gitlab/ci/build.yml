@@ -18,3 +18,4 @@ build-image:
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/.gitlab/docker/python/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${TAG}"
+      --force
