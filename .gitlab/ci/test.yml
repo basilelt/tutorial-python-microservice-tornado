@@ -76,13 +76,12 @@ python-code-coverage:
   script:
     - cd /app
     - coverage run --source=addrservice --branch -m unittest discover tests -p '*_test.py'
-    - coverage run --source=addrservice --branch ./run.py test
     - coverage html
   artifacts:
     paths:
       - /coverage-reports/htmlcov
     reports:
-      html: /app/htmlcov/index.html
+      coverage_report: /coverage-reports/htmlcov/index.html
 
 # serve-coverage-report:
 #   stage: test
