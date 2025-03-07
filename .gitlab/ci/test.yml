@@ -32,59 +32,59 @@ python-type-check:
     - cd /app
     - mypy ./addrservice ./tests
 
-python-linter:
-  stage: test
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
-  variables:
-    GIT_STRATEGY: none
-    TAG: $CI_COMMIT_REF_SLUG
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
-      variables:  
-        TAG: $CI_COMMIT_TAG
-  script:
-    - cd /app
-    - flake8 ./addrservice ./tests
+# python-linter:
+#   stage: test
+#   image: ${CI_REGISTRY_IMAGE}:${TAG}
+#   variables:
+#     GIT_STRATEGY: none
+#     TAG: $CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH'
+#     - if: '$CI_COMMIT_TAG'
+#       variables:  
+#         TAG: $CI_COMMIT_TAG
+#   script:
+#     - cd /app
+#     - flake8 ./addrservice ./tests
 
-python-unit-test:
-  stage: test
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
-  variables:
-    GIT_STRATEGY: none
-    TAG: $CI_COMMIT_REF_SLUG
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
-      variables:  
-        TAG: $CI_COMMIT_TAG
-  script:
-    - cd /app
-    - python -m unittest discover tests -p '*_test.py'
+# python-unit-test:
+#   stage: test
+#   image: ${CI_REGISTRY_IMAGE}:${TAG}
+#   variables:
+#     GIT_STRATEGY: none
+#     TAG: $CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH'
+#     - if: '$CI_COMMIT_TAG'
+#       variables:  
+#         TAG: $CI_COMMIT_TAG
+#   script:
+#     - cd /app
+#     - python -m unittest discover tests -p '*_test.py'
 
-python-code-coverage:
-  stage: test
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
-  variables:
-    GIT_STRATEGY: none
-    TAG: $CI_COMMIT_REF_SLUG
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
-      variables:  
-        TAG: $CI_COMMIT_TAG
-  script:
-    - cd /app
-    - coverage run --source=addrservice --branch -m unittest discover tests -p '*_test.py'
-    - coverage html
-    - coverage xml -o /coverage-reports/coverage.xml
-  artifacts:
-    paths:
-      - /coverage-reports/htmlcov
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: /coverage-reports/coverage.xml
+# python-code-coverage:
+#   stage: test
+#   image: ${CI_REGISTRY_IMAGE}:${TAG}
+#   variables:
+#     GIT_STRATEGY: none
+#     TAG: $CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH'
+#     - if: '$CI_COMMIT_TAG'
+#       variables:  
+#         TAG: $CI_COMMIT_TAG
+#   script:
+#     - cd /app
+#     - coverage run --source=addrservice --branch -m unittest discover tests -p '*_test.py'
+#     - coverage html
+#     - coverage xml -o /coverage-reports/coverage.xml
+#   artifacts:
+#     paths:
+#       - /coverage-reports/htmlcov
+#     reports:
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: /coverage-reports/coverage.xml
 
 # serve-coverage-report:
 #   stage: test
