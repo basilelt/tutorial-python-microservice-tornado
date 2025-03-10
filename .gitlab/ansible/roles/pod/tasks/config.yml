@@ -30,3 +30,13 @@
       kind: Namespace
       metadata:
         name: "{{ CI_ENVIRONMENT_SLUG }}"
+
+- name: Set registry auth variable
+  set_fact:
+    registry_auth: '{"auths":{"{{ CI_REGISTRY }}":{"username":"{{ CI_REGISTRY_USER }}","password":"{{ CI_REGISTRY_PASSWORD }}","auth":"{{ (CI_REGISTRY_USER + ":" + CI_REGISTRY_PASSWORD) | b64encode }}"}}}'
+
+- name: Create registry credentials secret
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "~/.kube/config"
+    definition: "{{ lookup('template', 'registry-secret.yml.j2') | from_yaml }}"
