@@ -3,6 +3,7 @@
 
 - name: Import config task
   ansible.builtin.import_tasks: config.yml
+  tags: integration, preproduction, production, review
 
 - name: Import deploy preproduction, integration task
   ansible.builtin.import_tasks: deploy.yml
@@ -18,3 +19,4 @@
 
 - name: Import service task
   ansible.builtin.import_tasks: service.yml
+  tags: integration, preproduction, production, review

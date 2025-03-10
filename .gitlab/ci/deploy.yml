@@ -9,6 +9,7 @@ deploy_production:
   before_script:
     - apk add --no-cache python3 py3-kubernetes
     - ansible-galaxy collection install kubernetes.core
+    - chmod -R 755 .gitlab/ansible
   script:
     - cd .gitlab/ansible
     - ansible-playbook -i inventory/inventory.ini site.yml --tags production
@@ -32,9 +33,10 @@ deploy:
   before_script:
     - apk add --no-cache python3 py3-kubernetes
     - ansible-galaxy collection install kubernetes.core
+    - chmod -R 755 .gitlab/ansible
   script:
     - cd .gitlab/ansible
-    - ansible-playbook -i inventory/inventory.ini site.yml --tags $ENVIRONMENT
+    - ansible-playbook -i inventory/inventory.ini site.yml --tags "$ENVIRONMENT"
   environment:
     name: $ENVIRONMENT
     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN

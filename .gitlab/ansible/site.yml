@@ -8,3 +8,4 @@
     - name: "Import pod role"
       ansible.builtin.include_role:
         name: pod
+      tags: integration, preproduction, production, review
