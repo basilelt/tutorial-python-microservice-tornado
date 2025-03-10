@@ -7,7 +7,7 @@
       apiVersion: v1
       kind: Service
       metadata:
-        name: app-service
+        name: app-service-{{ CI_ENVIRONMENT_SLUG }}
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         selector:
@@ -15,4 +15,5 @@
         ports:
           - port: 80
             targetPort: 8080
-        type: ClusterIP
+            nodePort: 30080
+        type: NodePort

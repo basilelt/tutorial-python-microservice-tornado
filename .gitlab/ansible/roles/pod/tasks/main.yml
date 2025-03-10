@@ -5,17 +5,21 @@
   ansible.builtin.import_tasks: config.yml
   tags: integration, preproduction, production, review
 
-- name: Import deploy preproduction, integration task
+- name: Import deploy task
   ansible.builtin.import_tasks: deploy.yml
-  tags: preproduction, integration
+  tags: preproduction, integration, review
 
 - name: Import deploy production task
   ansible.builtin.import_tasks: deploy_production.yml
   tags: production
 
-- name: Import deploy review task
-  ansible.builtin.import_tasks: deploy_review.yml
-  tags: review
+- name: Import ingress task
+  ansible.builtin.import_tasks: ingress.yml
+  tags: preproduction, integration, review
+
+- name: Import ingress production task
+  ansible.builtin.import_tasks: ingress_production.yml
+  tags: production
 
 - name: Import service task
   ansible.builtin.import_tasks: service.yml
