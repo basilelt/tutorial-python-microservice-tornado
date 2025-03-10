@@ -13,3 +13,5 @@ RUN apk add --no-cache gcc=13.2.1_git20240309-r1 musl-dev=1.2.5-r1 && \
     pip install -r requirements.txt --no-cache-dir --no-build-isolation && \
     apk del gcc musl-dev && \
     pip uninstall -y setuptools wheel --no-cache-dir
+
+ENTRYPOINT [ "" ]
