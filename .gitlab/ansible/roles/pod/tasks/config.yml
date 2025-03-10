@@ -40,3 +40,9 @@
     state: present
     kubeconfig: "~/.kube/config"
     definition: "{{ lookup('template', 'registry-secret.yml.j2') | from_yaml }}"
+
+- name: Create SSL certificate secret
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "~/.kube/config"
+    definition: "{{ lookup('template', 'ssl-secret.yml.j2') | from_yaml }}"

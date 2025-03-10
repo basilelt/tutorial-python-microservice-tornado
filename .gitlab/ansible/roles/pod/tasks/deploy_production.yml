@@ -21,7 +21,7 @@
           spec:
             hostname: ""
             containers:
-              - name: app-container
+              - name: app-container-production
                 image: "{{ CI_REGISTRY_IMAGE }}"
                 imagePullPolicy: Always
                 command: ["/bin/sh", "-c"]

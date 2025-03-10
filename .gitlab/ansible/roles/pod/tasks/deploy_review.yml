@@ -21,7 +21,7 @@
           spec:
             hostname: "{{ CI_ENVIRONMENT_SLUG }}"
             containers:
-              - name: app-container
+              - name: app-container-review
                 image: "{{ CI_REGISTRY_IMAGE }}"
                 imagePullPolicy: Always
                 command: ["/bin/sh", "-c"]
