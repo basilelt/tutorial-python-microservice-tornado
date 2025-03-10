@@ -1,7 +1,13 @@
 ---
-- name: Create temporary kubeconfig directory
+- name: Create kube directory
   ansible.builtin.file:
     path: "~/.kube"
+    state: directory
+    mode: '0700'
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: "~/.kube/config"
     state: directory
     mode: '0700'
 
@@ -10,7 +16,6 @@
     src: "admin.conf.j2"
     dest: "~/.kube/config/admin.conf"
     mode: '0600'
-
 
 - name: Ensure namespace exists
   kubernetes.core.k8s:
