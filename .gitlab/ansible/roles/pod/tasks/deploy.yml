@@ -1,4 +1,8 @@
 ---
+- name: Set replicas as integer variable
+  set_fact:
+    replicas_int: "{{ REPLICAS | int }}"
+
 - name: Deploy high-availability pods using kubectl
   kubernetes.core.k8s:
     state: present
@@ -10,7 +14,7 @@
         name: app-deployment
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
-        replicas: "{{ REPLICAS | int }}"  # High availability with multiple replicas
+        replicas: "{{ replicas_int }}"  # High availability with multiple replicas
         selector:
           matchLabels:
             app: microservice
