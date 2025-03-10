@@ -10,7 +10,7 @@
         name: app-deployment
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
-        replicas: "{{ REPLICAS }}"  # High availability with multiple replicas
+        replicas: {{ REPLICAS }}  # High availability with multiple replicas
         selector:
           matchLabels:
             app: microservice
