@@ -7,11 +7,11 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: app-deployment
+        name: app-deployment-{{ CI_ENVIRONMENT_SLUG }}
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         replicas: 1  # High availability with multiple replicas
-        revisionHistoryLimit: 2
+        revisionHistoryLimit: 0
         selector:
           matchLabels:
             app: microservice

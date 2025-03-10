@@ -11,7 +11,7 @@
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         replicas: 3  # High availability with multiple replicas
-        revisionHistoryLimit: 2
+        revisionHistoryLimit: 0
         selector:
           matchLabels:
             app: microservice
