@@ -32,20 +32,20 @@ python-type-check:
     - cd /app
     - mypy ./addrservice ./tests
 
-# python-linter:
-#   stage: test
-#   image: ${CI_REGISTRY_IMAGE}:${TAG}
-#   variables:
-#     GIT_STRATEGY: none
-#     TAG: $CI_COMMIT_REF_SLUG
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH'
-#     - if: '$CI_COMMIT_TAG'
-#       variables:  
-#         TAG: $CI_COMMIT_TAG
-#   script:
-#     - cd /app
-#     - flake8 ./addrservice ./tests
+python-linter:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  variables:
+    GIT_STRATEGY: none
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+      variables:  
+        TAG: $CI_COMMIT_TAG
+  script:
+    - cd /app
+    - flake8 ./addrservice ./tests
 
 # python-unit-test:
 #   stage: test
