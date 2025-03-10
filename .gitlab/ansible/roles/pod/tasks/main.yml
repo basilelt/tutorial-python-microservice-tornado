@@ -2,14 +2,14 @@
 # tasks file for docker
 
 - name: Create temporary kubeconfig directory
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.kube"
     state: directory
     mode: '0700'
 
-- name: Copy admin.conf to kubeconfig
-  copy:
-    src: "admin.conf"
+- name: Template admin.conf to kubeconfig
+  ansible.builtin.template:
+    src: "admin.conf.j2"
     dest: "{{ ansible_env.HOME }}/.kube/config"
     mode: '0600'
 
@@ -33,20 +33,20 @@
               app: microservice
           spec:
             containers:
-            - name: app-container
-              image: "{{ CI_REGISTRY_IMAGE }}"
-              imagePullPolicy: Always
-              command: ["/bin/sh", "-c"]
-              args: ["python addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-local.yaml --debug"]  # Custom command to start the pod
-              ports:
-              - containerPort: 8080
-              resources:
-                limits:
-                  cpu: "500m"
-                  memory: "512Mi"
-                requests:
-                  cpu: "200m"
-                  memory: "256Mi"
+              - name: app-container
+                image: "{{ CI_REGISTRY_IMAGE }}"
+                imagePullPolicy: Always
+                command: ["/bin/sh", "-c"]
+                args: ["python addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-local.yaml --debug"]  # Custom command to start the pod
+                ports:
+                  - containerPort: 8080
+                resources:
+                  limits:
+                    cpu: "500m"
+                    memory: "512Mi"
+                  requests:
+                    cpu: "200m"
+                    memory: "256Mi"
 
 - name: Create service for the deployment
   kubernetes.core.k8s:
@@ -56,11 +56,11 @@
       kind: Service
       metadata:
         name: microservice-service
-        namespace: default
+        namespace: microservices
       spec:
         type: ClusterIP
         selector:
           app: microservice
         ports:
-        - port: 80
-          targetPort: 8080
+          - port: 80
+        targetPort: 8080

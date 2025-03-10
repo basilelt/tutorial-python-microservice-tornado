@@ -1,4 +1,4 @@
-stop_review:
+start_production:
   stage: deploy
   image: alpine/ansible:2.18.1
   variables:
