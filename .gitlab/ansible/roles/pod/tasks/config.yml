@@ -5,21 +5,16 @@
     state: directory
     mode: '0700'
 
-- name: Create config directory
-  ansible.builtin.file:
-    path: "~/.kube/config"
-    state: directory
-    mode: '0700'
-
 - name: Template admin.conf to kubeconfig
   ansible.builtin.template:
     src: "admin.conf.j2"
-    dest: "~/.kube/config/admin.conf"
+    dest: "~/.kube/config"
     mode: '0600'
 
 - name: Ensure namespace exists
   kubernetes.core.k8s:
     state: present
+    kubeconfig: "~/.kube/config"
     definition:
       apiVersion: v1
       kind: Namespace

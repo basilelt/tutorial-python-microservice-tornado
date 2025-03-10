@@ -2,6 +2,7 @@
 - name: Deploy high-availability pods using kubectl
   kubernetes.core.k8s:
     state: present
+    kubeconfig: "~/.kube/config"
     definition:
       apiVersion: apps/v1
       kind: Deployment

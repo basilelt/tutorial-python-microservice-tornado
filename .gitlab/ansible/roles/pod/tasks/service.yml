@@ -1,17 +1,18 @@
 ---
-- name: Create service for the deployment
+- name: Create Service for the application
   kubernetes.core.k8s:
     state: present
+    kubeconfig: "~/.kube/config"  # Explicitly specify the kubeconfig file
     definition:
       apiVersion: v1
       kind: Service
       metadata:
-        name: microservice-service
+        name: app-service
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
-        type: ClusterIP
         selector:
           app: microservice
         ports:
           - port: 80
             targetPort: 8080
+        type: ClusterIP
