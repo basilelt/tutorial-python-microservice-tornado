@@ -1,20 +1,14 @@
 ---
 - name: Set replicas as integer variable
   set_fact:
-    replicas_int: "{{ REPLICAS | int }}"
-
-- name: Deploy high-availability pods using kubectl
-  kubernetes.core.k8s:
-    state: present
-    kubeconfig: "~/.kube/config"
-    definition:
+    deployment_def:
       apiVersion: apps/v1
       kind: Deployment
       metadata:
         name: app-deployment
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
-        replicas: {{ replicas_int }}  # High availability with multiple replicas
+        replicas: "{{ REPLICAS | int }}"
         selector:
           matchLabels:
             app: microservice
@@ -23,12 +17,14 @@
             labels:
               app: microservice
           spec:
+            hostname: "{{ HOST }}"
+            subdomain: "microservice"    
             containers:
               - name: app-container
                 image: "{{ CI_REGISTRY_IMAGE }}"
                 imagePullPolicy: Always
                 command: ["/bin/sh", "-c"]
-                args: ["python addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-local.yaml --debug"]  # Custom command to start the pod
+                args: ["python addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-local.yaml --debug"]
                 ports:
                   - containerPort: 8080
                 resources:
@@ -38,3 +34,9 @@
                   requests:
                     cpu: "200m"
                     memory: "256Mi"
+
+- name: Deploy high-availability pods using kubectl
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "~/.kube/config"
+    definition: "{{ deployment_def }}"

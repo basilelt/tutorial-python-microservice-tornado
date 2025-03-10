@@ -3,17 +3,17 @@ clusters:
 - cluster:
     certificate-authority-data: {{ CERTIFICATE_AUTHORITY_DATA }}
     server: https://{{ KUBE_IP }}:6443
-  name: {{ CLUSTER_URL }}
+  name: {{ KUBE_DOMAIN }}
 contexts:
 - context:
-    cluster: {{ CLUSTER_URL }}
-    user: kubernetes-admin-{{ CLUSTER_URL }}
-  name: kubernetes-admin-{{ CLUSTER_URL }}@{{ CLUSTER_URL }}
-current-context: kubernetes-admin-{{ CLUSTER_URL }}@{{ CLUSTER_URL }}
+    cluster: {{ KUBE_DOMAIN }}
+    user: kubernetes-admin-{{ KUBE_DOMAIN }}
+  name: kubernetes-admin-{{ KUBE_DOMAIN }}@{{ KUBE_DOMAIN }}
+current-context: kubernetes-admin-{{ KUBE_DOMAIN }}@{{ KUBE_DOMAIN }}
 kind: Config
 preferences: {}
 users:
-- name: kubernetes-admin-{{ CLUSTER_URL }}
+- name: kubernetes-admin-{{ KUBE_DOMAIN }}
   user:
     client-certificate-data: {{ CLIENT_CERTIFICATE_DATA }}
     client-key-data: {{ CLIENT_KEY_DATA }}
