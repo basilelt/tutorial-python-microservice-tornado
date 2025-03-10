@@ -11,6 +11,16 @@
     dest: "~/.kube/config"
     mode: '0600'
 
+- name: Print kubeconfig content for debugging
+  ansible.builtin.command: cat ~/.kube/config
+  register: kubeconfig_content
+  changed_when: false
+
+- name: Show kubeconfig content
+  ansible.builtin.debug:
+    var: kubeconfig_content.stdout_lines
+    verbosity: 1
+
 - name: Ensure namespace exists
   kubernetes.core.k8s:
     state: present

@@ -12,7 +12,7 @@ deploy_production:
     - ansible-galaxy collection install kubernetes.core
   script:
     - cd .gitlab/ansible
-    - ansible-playbook -i inventory/inventory.ini site.yml -v  # Added -v for verbose output
+    - ansible-playbook -i inventory/inventory.ini site.yml
   environment:
     name: production
     url: http://$HOST
@@ -35,7 +35,7 @@ deploy:
     - ansible-galaxy collection install kubernetes.core
   script:
     - cd .gitlab/ansible
-    - ansible-playbook -i inventory/inventory.ini site.yml -v  # Added -v for verbose output
+    - ansible-playbook -i inventory/inventory.ini site.yml
   environment:
     name: $ENVIRONMENT
     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN

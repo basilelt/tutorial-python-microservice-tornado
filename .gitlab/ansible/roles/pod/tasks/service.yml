@@ -2,7 +2,7 @@
 - name: Create Service for the application
   kubernetes.core.k8s:
     state: present
-    kubeconfig: "~/.kube/config"  # Explicitly specify the kubeconfig file
+    kubeconfig: "~/.kube/config"
     definition:
       apiVersion: v1
       kind: Service
