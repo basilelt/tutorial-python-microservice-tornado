@@ -8,8 +8,9 @@
 - name: Template admin.conf to kubeconfig
   ansible.builtin.template:
     src: "admin.conf.j2"
-    dest: "~/.kube/config"
+    dest: "~/.kube/config/admin.conf"
     mode: '0600'
+
 
 - name: Ensure namespace exists
   kubernetes.core.k8s:
