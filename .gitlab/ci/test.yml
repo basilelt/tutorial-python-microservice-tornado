@@ -80,11 +80,11 @@ python-code-coverage:
     - coverage xml
   artifacts:
     paths:
-      - htmlcov
+      - /app/htmlcov
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: coverage.xml
+        path: /app/coverage.xml
 
 # serve-coverage-report:
 #   stage: test
