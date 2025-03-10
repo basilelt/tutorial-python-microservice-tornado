@@ -20,7 +20,6 @@
               app: microservice
           spec:
             hostname: "{{ CI_ENVIRONMENT_SLUG }}"
-            subdomain: "{{ KUBE_DOMAIN }}"
             containers:
               - name: app-container
                 image: "{{ CI_REGISTRY_IMAGE }}"
