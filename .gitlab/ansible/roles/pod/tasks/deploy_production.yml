@@ -10,7 +10,7 @@
         name: app-deployment
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
-        replicas: 1  # High availability with multiple replicas
+        replicas: 3  # High availability with multiple replicas
         selector:
           matchLabels:
             app: microservice
@@ -19,7 +19,7 @@
             labels:
               app: microservice
           spec:
-            hostname: "{{ CI_ENVIRONMENT_SLUG }}"
+            hostname: ""
             subdomain: "{{ KUBE_DOMAIN }}"
             containers:
               - name: app-container
