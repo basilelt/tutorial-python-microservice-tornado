@@ -13,6 +13,15 @@
     dest: "{{ ansible_env.HOME }}/.kube/config"
     mode: '0600'
 
+- name: Ensure namespace exists
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ CI_ENVIRONMENT_SLUG }}"
+
 - name: Deploy high-availability pods using kubectl
   kubernetes.core.k8s:
     state: present
@@ -21,9 +30,9 @@
       kind: Deployment
       metadata:
         name: app-deployment
-        namespace: default
+        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
-        replicas: 3  # High availability with multiple replicas
+        replicas: {{ REPLICAS }}  # High availability with multiple replicas
         selector:
           matchLabels:
             app: microservice
@@ -56,11 +65,11 @@
       kind: Service
       metadata:
         name: microservice-service
-        namespace: microservices
+        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         type: ClusterIP
         selector:
           app: microservice
         ports:
           - port: 80
-        targetPort: 8080
+            targetPort: 8080
