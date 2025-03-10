@@ -12,7 +12,7 @@ deploy_production:
     - chmod -R 755 .gitlab/ansible
   script:
     - cd .gitlab/ansible
-    - ansible-playbook -i inventory/inventory.ini site.yml --tags production
+    - ansible-playbook site.yml --tags production
   environment:
     name: production
     url: http://$KUBE_DOMAIN
@@ -36,7 +36,7 @@ deploy:
     - chmod -R 755 .gitlab/ansible
   script:
     - cd .gitlab/ansible
-    - ansible-playbook -i inventory/inventory.ini site.yml --tags "$ENVIRONMENT"
+    - ansible-playbook site.yml --tags "$ENVIRONMENT"
   environment:
     name: $ENVIRONMENT
     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
@@ -54,7 +54,7 @@ deploy:
 #     - ansible-galaxy collection install kubernetes.core
 #   script:
 #     - cd .gitlab/ansible
-#     - ansible-playbook -i inventory/inventory.ini site.yml --tags review
+#     - ansible-playbook --tags review
 #   environment:
 #     name: review/$CI_COMMIT_REF_SLUG
 #     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN

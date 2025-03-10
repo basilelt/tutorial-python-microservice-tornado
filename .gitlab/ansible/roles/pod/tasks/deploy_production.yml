@@ -23,11 +23,10 @@
         template:
           metadata:
             labels:
-              app: microservice
+              app: microservice-{{ CI_ENVIRONMENT_SLUG }}
           spec:
-            hostname: ""
             containers:
-              - name: app-container-production
+              - name: app-container-{{ CI_ENVIRONMENT_SLUG }}
                 image: "{{ CI_REGISTRY_IMAGE }}:{{ TAG }}"
                 imagePullPolicy: Always
                 command: ["/bin/sh", "-c"]

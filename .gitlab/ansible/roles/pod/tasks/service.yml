@@ -11,9 +11,8 @@
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         selector:
-          app: microservice
+          app: microservice-{{ CI_ENVIRONMENT_SLUG }}
         ports:
           - port: 80
             targetPort: 8080
-            nodePort: 30080
-        type: NodePort
+        type: ClusterIP

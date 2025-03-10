@@ -14,13 +14,13 @@
           nginx.ingress.kubernetes.io/ssl-redirect: "false"
       spec:
         rules:
-        - host: "{{ CI_ENVIRONMENT_SLUG }}.{{ KUBE_DOMAIN }}"
-          http:
-            paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                service:
-                  name: app-service-{{ CI_ENVIRONMENT_SLUG }}
-                  port:
-                    number: 80
+          - host: "{{ CI_ENVIRONMENT_SLUG }}.{{ KUBE_DOMAIN }}"
+            http:
+              paths:
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: app-service-{{ CI_ENVIRONMENT_SLUG }}
+                      port:
+                        number: 80
