@@ -11,29 +11,32 @@ deploy_production:
     - ansible-galaxy collection install kubernetes.core
   script:
     - cd .gitlab/ansible
-    - ansible-playbook -i inventory.ini site.yml
+    - ansible-playbook site.yml
   environment:
     name: production
     url: http://$HOST
 
-# deploy:
-#   stage: deploy
-#   image: alpine/ansible:2.18.1
-#   variables:
-#     ANSIBLE_HOST_KEY_CHECKING: "FALSE"
-#     TAG: $CI_COMMIT_REF_SLUG
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "develop"'
-#       variables:
-#         ENVIRONMENT: integration
-#     - if: '$CI_COMMIT_BRANCH == "main"'
-#       variables:
-#         ENVIRONMENT: preproduction
-#   before_script:
-#     - ansible-galaxy collection install kubernetes.core
-#   script:
-#     - cd .gitlab/ansible
-#     - ansible-playbook -i inventory.ini site.yml
+deploy:
+  stage: deploy
+  image: alpine/ansible:2.18.1
+  variables:
+    ANSIBLE_HOST_KEY_CHECKING: "FALSE"
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      variables:
+        ENVIRONMENT: integration
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      variables:
+        ENVIRONMENT: preproduction
+  before_script:
+    - ansible-galaxy collection install kubernetes.core
+  script:
+    - cd .gitlab/ansible
+    - ansible-playbook site.yml
+  environment:
+    name: $ENVIRONMENT
+    url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
 
 # deploy_review:
 #   stage: deploy
@@ -47,4 +50,8 @@ deploy_production:
 #     - ansible-galaxy collection install kubernetes.core
 #   script:
 #     - cd .gitlab/ansible
-#     - ansible-playbook -i inventory.ini site.yml
+#     - ansible-playbook site.yml
+#   environment:
+#     name: review/$CI_COMMIT_REF_SLUG
+#     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+#     on_stop: stop_review

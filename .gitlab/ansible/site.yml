@@ -1,0 +1,10 @@
+---
+- name: "Deploy microservice"
+  hosts: kubeadm
+  gather_facts: false
+  any_errors_fatal: true
+
+  tasks:
+    - name: "Import pod role"
+      ansible.builtin.include_role:
+        name: pod

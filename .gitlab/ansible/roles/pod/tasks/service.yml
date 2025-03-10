@@ -1,0 +1,17 @@
+---
+- name: Create service for the deployment
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: microservice-service
+        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+      spec:
+        type: ClusterIP
+        selector:
+          app: microservice
+        ports:
+          - port: 80
+            targetPort: 8080

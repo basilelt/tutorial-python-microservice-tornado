@@ -1,0 +1,21 @@
+---
+- name: Create temporary kubeconfig directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.kube"
+    state: directory
+    mode: '0700'
+
+- name: Template admin.conf to kubeconfig
+  ansible.builtin.template:
+    src: "admin.conf.j2"
+    dest: "{{ ansible_env.HOME }}/.kube/config"
+    mode: '0600'
+
+- name: Ensure namespace exists
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ CI_ENVIRONMENT_SLUG }}"
