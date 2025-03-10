@@ -8,7 +8,6 @@ ansible-lint:
   stage: compliance
   image: alpine/ansible:2.18.1
   before_script:
-    - apk add --no-cache py3-pip
-    - pip install ansible-lint
+    - apk add --no-cache py3-ansible-lint
   script:
     - ansible-lint .gitlab/ansible/
