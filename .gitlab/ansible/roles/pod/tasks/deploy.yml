@@ -14,7 +14,7 @@
         revisionHistoryLimit: 0
         selector:
           matchLabels:
-            app: microservice-{{ CI_ENVIRONMENT_SLUG }}
+            app: microservice
         strategy:
           type: RollingUpdate
           rollingUpdate:
@@ -23,7 +23,7 @@
         template:
           metadata:
             labels:
-              app: microservice-{{ CI_ENVIRONMENT_SLUG }}
+              app: microservice
           spec:
             hostname: "{{ CI_ENVIRONMENT_SLUG }}"
             containers:

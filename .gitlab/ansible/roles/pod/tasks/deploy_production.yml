@@ -23,7 +23,7 @@
         template:
           metadata:
             labels:
-              app: microservice-{{ CI_ENVIRONMENT_SLUG }}
+              app: microservice
           spec:
             containers:
               - name: app-container-{{ CI_ENVIRONMENT_SLUG }}

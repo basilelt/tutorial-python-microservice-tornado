@@ -11,7 +11,7 @@
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         selector:
-          app: microservice-{{ CI_ENVIRONMENT_SLUG }}
+          app: microservice
         ports:
           - port: 80
             targetPort: 8080
