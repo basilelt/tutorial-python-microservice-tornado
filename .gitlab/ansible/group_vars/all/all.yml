@@ -1,0 +1,15 @@
+ansible_ssh_user: "{{ lookup('env', 'SSH_USER') }}"
+ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+
+CI_REGISTRY_USER: "{{ lookup('env', 'CI_REGISTRY_USER') }}"
+CI_REGISTRY_PASSWORD: "{{ lookup('env', 'CI_REGISTRY_PASSWORD') }}"
+CI_REGISTRY_IMAGE: "{{ lookup('env', 'CI_REGISTRY_IMAGE') }}"
+CI_PROJECT_NAME: "{{ lookup('env', 'CI_PROJECT_NAME') }}"
+CI_ENVIRONMENT_SLUG: "{{ lookup('env', 'CI_ENVIRONMENT_SLUG') }}"
+
+TAG: "{{ lookup('env', 'TAG') }}"
+
+CERTIFICATE_AUTHORITY_DATA: "{{ lookup('env', 'CERTIFICATE_AUTHORITY_DATA') }}"
+CLIENT_CERTIFICATE_DATA: "{{ lookup('env', 'CLIENT_CERTIFICATE_DATA') }}"
+CLIENT_KEY_DATA: "{{ lookup('env', 'CLIENT_KEY_DATA') }}"
+CLUSTER_URL: "{{ lookup('env', 'CLUSTER_URL') }}"

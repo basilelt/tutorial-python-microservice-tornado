@@ -1,0 +1,11 @@
+stop_review:
+  stage: deploy
+  image: alpine/ansible:2.18.1
+  variables:
+    ANSIBLE_HOST_KEY_CHECKING: "FALSE"
+    TAG: $CI_COMMIT_REF_SLUG
+  before_script:
+    - ansible-galaxy collection install kubernetes.core
+  script:
+    - cd .gitlab/ansible
+    - ansible-playbook -i inventory.ini site.yml

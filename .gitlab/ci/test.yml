@@ -76,14 +76,10 @@ python-code-coverage:
     - cd src
     - coverage run --source=addrservice --branch -m unittest discover tests -p '*_test.py'
     - coverage html
-    - coverage xml
+    - coverage report
   artifacts:
     paths:
       - src/htmlcov
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: src/coverage.xml
 
 # serve-coverage-report:
 #   stage: test
