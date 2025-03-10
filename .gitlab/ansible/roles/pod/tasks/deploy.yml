@@ -28,7 +28,7 @@
             hostname: "{{ CI_ENVIRONMENT_SLUG }}"
             containers:
               - name: app-container-{{ CI_ENVIRONMENT_SLUG }}
-                image: "{{ CI_REGISTRY_IMAGE }}"
+                image: "{{ CI_REGISTRY_IMAGE }}:{{ TAG }}"
                 imagePullPolicy: Always
                 command: ["/bin/sh", "-c"]
                 args: ["python addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-local.yaml --debug"]  # Custom command to start the pod

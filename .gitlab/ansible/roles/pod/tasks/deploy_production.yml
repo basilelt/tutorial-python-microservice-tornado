@@ -7,7 +7,7 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: app-deployment
+        name: app-deployment-production
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
       spec:
         replicas: 3  # High availability with multiple replicas
@@ -28,7 +28,7 @@
             hostname: ""
             containers:
               - name: app-container-production
-                image: "{{ CI_REGISTRY_IMAGE }}"
+                image: "{{ CI_REGISTRY_IMAGE }}:{{ TAG }}"
                 imagePullPolicy: Always
                 command: ["/bin/sh", "-c"]
                 args: ["python addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-local.yaml --debug"]  # Custom command to start the pod
