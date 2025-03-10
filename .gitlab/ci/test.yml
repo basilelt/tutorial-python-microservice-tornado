@@ -86,6 +86,7 @@ python-code-coverage:
         coverage_format: cobertura
         path: coverage.xml
 
+
 # serve-coverage-report:
 #   stage: test
 #   image: alpine/ansible:2.18.1
