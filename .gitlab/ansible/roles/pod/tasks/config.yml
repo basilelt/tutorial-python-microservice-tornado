@@ -64,4 +64,4 @@
   kubernetes.core.k8s:
     state: present
     kubeconfig: "~/.kube/config"
-    definition: "{{ lookup('template', 'ssl-secret.yml.j2') | from_yaml }}"
+    definition: "{{ lookup('template', 'cert-secret.yml.j2') | from_yaml }}"
