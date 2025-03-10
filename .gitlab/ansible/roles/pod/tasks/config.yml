@@ -33,7 +33,26 @@
 
 - name: Set registry auth variable
   set_fact:
-    registry_auth: '{"auths":{"{{ CI_REGISTRY }}":{"username":"{{ CI_REGISTRY_USER }}","password":"{{ CI_REGISTRY_PASSWORD }}","auth":"{{ (CI_REGISTRY_USER + ":" + CI_REGISTRY_PASSWORD) | b64encode }}"}}}'
+    auth_string: "{{ CI_REGISTRY_USER }}:{{ CI_REGISTRY_PASSWORD }}"
+
+- name: Create registry auth data structure
+  set_fact:
+    registry_auth_data:
+      auths:
+        "{{ CI_REGISTRY }}":
+          username: "{{ CI_REGISTRY_USER }}"
+          password: "{{ CI_REGISTRY_PASSWORD }}"
+          auth: "{{ auth_string | b64encode }}"
+
+- name: Convert registry auth to JSON
+  set_fact:
+    registry_auth: "{{ registry_auth_data | to_json }}"
+
+- name: Create registry credentials secret
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "~/.kube/config"
+    definition: "{{ lookup('template', 'registry-secret.yml.j2') | from_yaml }}"
 
 - name: Create registry credentials secret
   kubernetes.core.k8s:
