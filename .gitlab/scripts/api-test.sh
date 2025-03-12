@@ -10,6 +10,17 @@ if [ -z "$API_URL" ] || [ -z "$DATA_FILE" ]; then
   exit 1
 fi
 
+# Extract domain from API_URL
+DOMAIN=$(echo "$API_URL" | sed -E 's#^https?://([^/]+).*#\1#')
+
+# Test if domain is reachable
+echo "Validating domain: $DOMAIN..."
+if ! curl --connect-timeout 5 -s -o /dev/null -w "%{http_code}" "http://$DOMAIN" > /dev/null 2>&1; then
+  echo "Error: Domain $DOMAIN is not reachable"
+  exit 1
+fi
+echo "Domain validation successful"
+
 echo "Testing API at $API_URL using data from $DATA_FILE"
 
 # Create an address entry
