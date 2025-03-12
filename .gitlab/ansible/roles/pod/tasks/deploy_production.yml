@@ -9,6 +9,8 @@
       metadata:
         name: app-deployment-production
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+        annotations:
+          deploy-date: "{{ ansible_date_time.iso8601 }}"
       spec:
         replicas: 3  # High availability with multiple replicas
         revisionHistoryLimit: 0

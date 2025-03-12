@@ -54,7 +54,7 @@ deploy_review:
     - ansible-galaxy collection install kubernetes.core
   script:
     - cd .gitlab/ansible
-    - ansible-playbook --tags review
+    - ansible-playbook site.yml --tags review
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
@@ -71,7 +71,7 @@ stop_review:
     - ansible-galaxy collection install kubernetes.core
   script:
     - cd .gitlab/ansible
-    - ansible-playbook --tags stop_review
+    - ansible-playbook reset.yml --tags review
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     action: stop
