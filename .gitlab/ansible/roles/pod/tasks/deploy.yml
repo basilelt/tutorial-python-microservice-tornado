@@ -26,6 +26,8 @@
           metadata:
             labels:
               app: microservice
+            annotations:
+              deploy-date: "{{ lookup('pipe', 'date -u +%Y-%m-%dT%H:%M:%SZ') }}"
           spec:
             hostname: "{{ CI_ENVIRONMENT_SLUG }}"
             containers:

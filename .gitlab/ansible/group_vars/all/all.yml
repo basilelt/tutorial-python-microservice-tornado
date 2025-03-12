@@ -1,4 +1,6 @@
 ---
+ansible_python_interpreter: /usr/bin/python3.12
+
 CI_REGISTRY: "{{ lookup('env', 'CI_REGISTRY') }}"
 CI_REGISTRY_USER: "{{ lookup('env', 'CI_REGISTRY_USER') }}"
 CI_REGISTRY_PASSWORD: "{{ lookup('env', 'CI_REGISTRY_PASSWORD') }}"
