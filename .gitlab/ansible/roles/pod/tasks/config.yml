@@ -32,11 +32,11 @@
         name: "{{ CI_ENVIRONMENT_SLUG }}"
 
 - name: Set registry auth variable
-  set_fact:
+  ansible.builtin.set_fact:
     auth_string: "{{ CI_REGISTRY_USER }}:{{ CI_REGISTRY_PASSWORD }}"
 
 - name: Create registry auth data structure
-  set_fact:
+  ansible.builtin.set_fact:
     registry_auth_data:
       auths:
         "{{ CI_REGISTRY }}":
@@ -45,7 +45,7 @@
           auth: "{{ auth_string | b64encode }}"
 
 - name: Convert registry auth to JSON
-  set_fact:
+  ansible.builtin.set_fact:
     registry_auth: "{{ registry_auth_data | to_json }}"
 
 - name: Create registry credentials secret
