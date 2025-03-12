@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euox pipefail
 
 API_URL=$1
 DATA_FILE=$2
@@ -19,7 +19,7 @@ echo "$RESPONSE"
 
 # Extract the location header to get the ID
 LOCATION=$(echo "$RESPONSE" | grep -i Location)
-ADDRESS_ID=$(echo "$LOCATION" | cut -d'/' -f3)
+ADDRESS_ID=$(echo "$LOCATION" | cut -d'/' -f3 | tr -d '\r\n')
 
 if [ -z "$ADDRESS_ID" ]; then
   echo "Failed to get address ID from response"
@@ -31,6 +31,7 @@ echo "Created address with ID: $ADDRESS_ID"
 # Get the created address to verify it exists
 echo -e "\nFetching created address..."
 GET_RESPONSE=$(curl -s -X GET "$API_URL/addresses/$ADDRESS_ID")
+echo "Response size: $(echo "$GET_RESPONSE" | wc -c) bytes"
 echo "$GET_RESPONSE"
 
 # Verify the address can be retrieved
