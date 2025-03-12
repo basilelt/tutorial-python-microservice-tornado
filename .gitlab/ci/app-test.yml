@@ -6,7 +6,7 @@ post-get-test_production:
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
-    - sh .gitlab/scripts/api-test.sh $URL data/addresses/namo.json
+    - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/namo.json
   environment:
     name: production
 
@@ -23,7 +23,7 @@ post-get-test:
       variables:
         ENVIRONMENT: preproduction
   script:
-    - sh .gitlab/scripts/api-test.sh $URL data/addresses/namo.json
+    - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/namo.json
   environment:
     name: $ENVIRONMENT
 
@@ -35,6 +35,6 @@ post-get-test_review:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   script:
-    - sh .gitlab/scripts/api-test.sh $URL data/addresses/raga.json
+    - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/raga.json
   environment:
     name: review/$CI_COMMIT_REF_SLUG
