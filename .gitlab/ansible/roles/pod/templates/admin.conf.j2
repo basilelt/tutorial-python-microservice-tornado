@@ -2,18 +2,18 @@ apiVersion: v1
 clusters:
 - cluster:
     certificate-authority-data: {{ CERTIFICATE_AUTHORITY_DATA }}
-    server: https://{{ KUBE_DOMAIN }}:6443
-  name: {{ KUBE_DOMAIN }}
+    server: https://{{ KUBEAPI_DOMAIN }}:6443
+  name: {{ CLUSTER_DOMAIN }}
 contexts:
 - context:
-    cluster: {{ KUBE_DOMAIN }}
-    user: kubernetes-admin-{{ KUBE_DOMAIN }}
-  name: kubernetes-admin-{{ KUBE_DOMAIN }}@{{ KUBE_DOMAIN }}
-current-context: kubernetes-admin-{{ KUBE_DOMAIN }}@{{ KUBE_DOMAIN }}
+    cluster: {{ CLUSTER_DOMAIN }}
+    user: kubernetes-admin-{{ CLUSTER_DOMAIN }}
+  name: kubernetes-admin-{{ CLUSTER_DOMAIN }}@{{ CLUSTER_DOMAIN }}
+current-context: kubernetes-admin-{{ CLUSTER_DOMAIN }}@{{ CLUSTER_DOMAIN }}
 kind: Config
 preferences: {}
 users:
-- name: kubernetes-admin-{{ KUBE_DOMAIN }}
+- name: kubernetes-admin-{{ CLUSTER_DOMAIN }}
   user:
     client-certificate-data: {{ CLIENT_CERTIFICATE_DATA }}
     client-key-data: {{ CLIENT_KEY_DATA }}
