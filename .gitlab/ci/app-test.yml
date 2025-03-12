@@ -2,46 +2,40 @@ post-get-test_production:
   stage: app-test
   image: curlimages/curl:latest
   variables:
-    GIT_STRATEGY: fetch
-    API_URL: http://$KUBE_DOMAIN
+    URL: http://$KUBE_DOMAIN
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
-    - .gitlab/scripts/api-test.sh $API_URL data/addresses/namo.json
+    - .gitlab/scripts/api-test.sh $URL data/addresses/namo.json
   environment:
     name: production
-    url: http://$KUBE_DOMAIN
 
 post-get-test:
   stage: app-test
   image: curlimages/curl:latest
   variables:
-    GIT_STRATEGY: fetch
+    URL: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   rules:
     - if: '$CI_COMMIT_BRANCH == "develop"'
       variables:
         ENVIRONMENT: integration
-        API_URL: http://integration.$KUBE_DOMAIN
     - if: '$CI_COMMIT_BRANCH == "master"'
       variables:
         ENVIRONMENT: preproduction
-        API_URL: http://preproduction.$KUBE_DOMAIN
   script:
-    - .gitlab/scripts/api-test.sh $API_URL data/addresses/namo.json
+    - ls -la
+    - .gitlab/scripts/api-test.sh $URL data/addresses/namo.json
   environment:
     name: $ENVIRONMENT
-    url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
 
 post-get-test_review:
   stage: app-test
   image: curlimages/curl:latest
   variables:
-    GIT_STRATEGY: fetch
-    API_URL: http://$CI_COMMIT_REF_SLUG.$KUBE_DOMAIN
+    URL: http://$CI_COMMIT_REF_SLUG.$KUBE_DOMAIN
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   script:
-    - .gitlab/scripts/api-test.sh $API_URL data/addresses/raga.json
+    - .gitlab/scripts/api-test.sh $URL data/addresses/raga.json
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
