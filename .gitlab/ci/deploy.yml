@@ -66,6 +66,8 @@ stop_review:
   variables:
     ANSIBLE_HOST_KEY_CHECKING: "FALSE"
     TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   before_script:
     - apk add --no-cache python3 py3-kubernetes
     - ansible-galaxy collection install kubernetes.core
