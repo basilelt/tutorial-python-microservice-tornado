@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euox pipefail
+set -e
 
 API_URL=$1
 DATA_FILE=$2
