@@ -39,17 +39,38 @@ build-coverage-image:
       --dockerfile "${CI_PROJECT_DIR}/.gitlab/docker/coverage/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${TAG}"
 
+docker-security-scan-coverage:
+  stage: coverage
+  image: 
+    name: aquasec/trivy:0.60.0
+    entrypoint: [""]
+  needs: 
+    - build-coverage-image
+  variables:
+    TAG: $CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+      variables:  
+        TAG: $CI_COMMIT_TAG
+  before_script:
+    - echo "${SSL_CERTIFICATE}" >> /etc/ssl/certs/ca-certificates.crt
+  script:
+    - trivy registry login ${CI_REGISTRY} --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD}
+    - trivy image "${CI_REGISTRY_IMAGE}:coverage-${TAG}" --no-progress --severity CRITICAL --exit-code 1
+    - trivy image "${CI_REGISTRY_IMAGE}:coverage-${TAG}" --no-progress --severity HIGH --exit-code 0
+
 serve-coverage-report-production:
   stage: coverage
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   needs:
-    - build-coverage-image
+    - docker-security-scan-coverage
   variables:
+    GIT_STRATEGY: none
     TAG: $CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG' 
   script:
-    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage-production
   environment:
     name: production/coverage
@@ -59,8 +80,9 @@ serve-coverage-report:
   stage: coverage
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   needs:
-    - build-coverage-image
+    - docker-security-scan-coverage
   variables:
+    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
     URL: http://coverage.$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   rules:
@@ -76,7 +98,6 @@ serve-coverage-report:
         ENVIRONMENT: production
         URL: http://coverage.$KUBE_DOMAIN
   script:
-    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage
   environment:
     name: $ENVIRONMENT/coverage
@@ -86,14 +107,14 @@ serve-coverage-report-review:
   stage: coverage
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   needs:
-    - build-coverage-image
+    - docker-security-scan-coverage
   variables:
+    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
     URL: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   script:
-    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage
   environment:
     name: review/$TAG
@@ -104,6 +125,7 @@ stop-review-coverage:
   stage: coverage
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   variables:
+    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
