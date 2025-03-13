@@ -19,5 +19,6 @@ post-get-test:
         ENVIRONMENT: review/$CI_COMMIT_REF_SLUG
   script:
     - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/namo.json
+    - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/raga.json
   environment:
     name: $ENVIRONMENT
