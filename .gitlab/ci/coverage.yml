@@ -99,6 +99,8 @@ serve-coverage-report:
         ENVIRONMENT: production
         URL: http://coverage.$KUBE_DOMAIN
   script:
+    - ls -la /
+    - ls -la /app || echo "App directory doesn't exist"
     - cd /app
     - ansible-playbook site.yml --tags coverage
   environment:
