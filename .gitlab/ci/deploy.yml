@@ -2,11 +2,11 @@ deploy_production:
   stage: deploy
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   variables:
-    GIT_STRATEGY: none
     TAG: $CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
+    - cd /ansible-files
     - ansible-playbook site.yml --tags production
   environment:
     name: production
@@ -16,7 +16,6 @@ deploy:
   stage: deploy
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   variables:
-    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH == "develop"'
@@ -26,6 +25,7 @@ deploy:
       variables:
         ENVIRONMENT: preproduction
   script:
+    - cd /ansible-files
     - ansible-playbook site.yml --tags "$ENVIRONMENT"
   environment:
     name: $ENVIRONMENT
@@ -35,11 +35,11 @@ deploy_review:
   stage: deploy
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   variables:
-    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   script:
+    - cd /ansible-files
     - ansible-playbook site.yml --tags review
   environment:
     name: review/$TAG
@@ -50,11 +50,11 @@ stop_review:
   stage: deploy
   image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   variables:
-    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   script:
+    - cd /ansible-files
     - ansible-playbook reset.yml --tags review
   environment:
     name: review/$TAG
