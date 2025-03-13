@@ -1,33 +1,41 @@
 ---
-- name: Delete Ingress for the application
-  kubernetes.core.k8s:
-    state: absent
+- name: Check if namespace exists
+  kubernetes.core.k8s_info:
     kubeconfig: "~/.kube/config"
-    definition:
-      apiVersion: networking.k8s.io/v1
-      kind: Ingress
-      metadata:
-        name: coverage-ingress-{{ CI_ENVIRONMENT_SLUG }}
-        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+    kind: Namespace
+    name: "{{ CI_ENVIRONMENT_SLUG }}"
+  register: namespace_status
+  ignore_errors: true
 
-- name: Delete Service for the application
+- name: Delete namespace if it exists
   kubernetes.core.k8s:
     state: absent
     kubeconfig: "~/.kube/config"
     definition:
       apiVersion: v1
-      kind: Service
+      kind: Namespace
       metadata:
-        name: coverage-service-{{ CI_ENVIRONMENT_SLUG }}
-        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+        name: "{{ CI_ENVIRONMENT_SLUG }}"
+  when: namespace_status.resources | default([]) | length > 0
+  register: delete_result
 
-- name: Delete Deployment for the application
-  kubernetes.core.k8s:
-    state: absent
+- name: Wait for namespace deletion
+  kubernetes.core.k8s_info:
     kubeconfig: "~/.kube/config"
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: coverage-deployment-{{ CI_ENVIRONMENT_SLUG }}
-        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+    kind: Namespace
+    name: "{{ CI_ENVIRONMENT_SLUG }}"
+  register: namespace_check
+  until: namespace_check.resources | default([]) | length == 0
+  delay: 5
+  retries: 12
+  when: delete_result.changed | default(false)
+
+- name: Display namespace deletion status
+  ansible.builtin.debug:
+    msg: "Namespace {{ CI_ENVIRONMENT_SLUG }} has been successfully deleted"
+  when: delete_result.changed | default(false)
+
+- name: Display already deleted status
+  ansible.builtin.debug:
+    msg: "Namespace {{ CI_ENVIRONMENT_SLUG }} was already deleted or did not exist"
+  when: namespace_status.resources | default([]) | length == 0

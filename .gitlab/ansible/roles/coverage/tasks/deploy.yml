@@ -32,7 +32,7 @@
             hostname: "coverage-{{ CI_ENVIRONMENT_SLUG }}"
             containers:
               - name: coverage-container-{{ CI_ENVIRONMENT_SLUG }}
-                image: "{{ CI_REGISTRY_IMAGE }}:{{ TAG }}"
+                image: "{{ CI_REGISTRY_IMAGE }}:coverage-{{ TAG }}"
                 imagePullPolicy: Always
                 ports:
                   - containerPort: 80
