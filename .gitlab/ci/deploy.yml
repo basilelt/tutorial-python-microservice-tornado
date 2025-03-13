@@ -1,12 +1,14 @@
 deploy_production:
   stage: deploy
-  image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
+  image: alpine/ansible:2.18.1
   variables:
     TAG: $CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - apk add --no-cache python3 py3-kubernetes
+    - ansible-galaxy collection install kubernetes.core
+    - chmod -R 755 .gitlab/ansible
   script:
     - cd ./gitlab/ansible
     - ansible-playbook site.yml --tags production
@@ -16,7 +18,7 @@ deploy_production:
 
 deploy:
   stage: deploy
-  image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
+  image: alpine/ansible:2.18.1
   variables:
     TAG: $CI_COMMIT_REF_SLUG
   rules:
@@ -27,7 +29,9 @@ deploy:
       variables:
         ENVIRONMENT: preproduction
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - apk add --no-cache python3 py3-kubernetes
+    - ansible-galaxy collection install kubernetes.core
+    - chmod -R 755 .gitlab/ansible
   script:
     - cd ./gitlab/ansible
     - ansible-playbook site.yml --tags "$ENVIRONMENT"
@@ -37,13 +41,15 @@ deploy:
 
 deploy_review:
   stage: deploy
-  image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
+  image: alpine/ansible:2.18.1
   variables:
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - apk add --no-cache python3 py3-kubernetes
+    - ansible-galaxy collection install kubernetes.core
+    - chmod -R 755 .gitlab/ansible
   script:
     - cd ./gitlab/ansible
     - ansible-playbook site.yml --tags review
@@ -54,13 +60,15 @@ deploy_review:
 
 stop_review:
   stage: deploy
-  image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
+  image: alpine/ansible:2.18.1
   variables:
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - apk add --no-cache python3 py3-kubernetes
+    - ansible-galaxy collection install kubernetes.core
+    - chmod -R 755 .gitlab/ansible
   script:
     - cd ./gitlab/ansible
     - ansible-playbook reset.yml --tags review

@@ -16,8 +16,6 @@ docker-security-scan:
     - trivy registry login ${CI_REGISTRY} --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD}
     - trivy image "${CI_REGISTRY_IMAGE}:${TAG}" --no-progress --severity CRITICAL --exit-code 1
     - trivy image "${CI_REGISTRY_IMAGE}:${TAG}" --no-progress --severity HIGH --exit-code 0
-    - trivy image "${CI_REGISTRY_IMAGE}:ansible-${TAG}" --no-progress --severity CRITICAL --exit-code 1
-    - trivy image "${CI_REGISTRY_IMAGE}:ansible-${TAG}" --no-progress --severity HIGH --exit-code 0
 
 python-type-check:
   stage: test
