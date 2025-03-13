@@ -3,24 +3,28 @@
 
 - name: Import config task
   ansible.builtin.import_tasks: config.yml
-  tags: integration, preproduction, production, review
+  tags: coverage
 
 - name: Import deploy task
   ansible.builtin.import_tasks: deploy.yml
-  tags: preproduction, integration, review
+  tags: coverage
 
 - name: Import deploy production task
-  ansible.builtin.import_tasks: deploy_production.yml
-  tags: production
+  ansible.builtin.import_tasks: deploy.yml
+  tags: coverage-production
 
 - name: Import ingress task
   ansible.builtin.import_tasks: ingress.yml
-  tags: preproduction, integration, review
+  tags: coverage
 
 - name: Import ingress production task
-  ansible.builtin.import_tasks: ingress_production.yml
-  tags: production
+  ansible.builtin.import_tasks: ingress.yml
+  tags: coverage-production
 
 - name: Import service task
   ansible.builtin.import_tasks: service.yml
-  tags: integration, preproduction, production, review
+  tags: coverage
+
+- name: Import reset task
+  ansible.builtin.import_tasks: reset.yml
+  tags: coverage-reset

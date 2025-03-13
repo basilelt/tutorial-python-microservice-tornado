@@ -7,20 +7,20 @@
       apiVersion: networking.k8s.io/v1
       kind: Ingress
       metadata:
-        name: app-ingress-{{ CI_ENVIRONMENT_SLUG }}
+        name: coverage-ingress-{{ CI_ENVIRONMENT_SLUG }}
         namespace: "{{ CI_ENVIRONMENT_SLUG }}"
         annotations:
           kubernetes.io/ingress.class: nginx
           nginx.ingress.kubernetes.io/ssl-redirect: "false"
       spec:
         rules:
-          - host: "{{ KUBE_DOMAIN }}"
+          - host: "coverage.{{ CI_ENVIRONMENT_SLUG }}.{{ KUBE_DOMAIN }}"
             http:
               paths:
                 - path: /
                   pathType: Prefix
                   backend:
                     service:
-                      name: app-service-{{ CI_ENVIRONMENT_SLUG }}
+                      name: coverage-service-{{ CI_ENVIRONMENT_SLUG }}
                       port:
                         number: 80

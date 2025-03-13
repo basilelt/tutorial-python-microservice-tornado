@@ -1,15 +1,3 @@
-post-get-test_production:
-  stage: app-test
-  image: curlimages/curl:8.12.1
-  variables:
-    URL: http://$KUBE_DOMAIN
-  rules:
-    - if: '$CI_COMMIT_TAG'
-  script:
-    - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/namo.json
-  environment:
-    name: production
-
 post-get-test:
   stage: app-test
   image: curlimages/curl:8.12.1
@@ -22,19 +10,14 @@ post-get-test:
     - if: '$CI_COMMIT_BRANCH == "master"'
       variables:
         ENVIRONMENT: preproduction
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        ENVIRONMENT: production
+        URL: http://$KUBE_DOMAIN
+    - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
+      variables:
+        ENVIRONMENT: review/$CI_COMMIT_REF_SLUG
   script:
     - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/namo.json
   environment:
     name: $ENVIRONMENT
-
-post-get-test_review:
-  stage: app-test
-  image: curlimages/curl:8.12.1
-  variables:
-    URL: http://$CI_COMMIT_REF_SLUG.$KUBE_DOMAIN
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
-  script:
-    - sh .gitlab/scripts/api-test.sh $URL src/data/addresses/raga.json
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG

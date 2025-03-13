@@ -5,7 +5,12 @@
   any_errors_fatal: true
 
   tasks:
+    - name: "Import coverage role"
+      ansible.builtin.include_role:
+        name: coverage
+      tags: coverage, coverage-production, coverage-reset
+
     - name: "Import pod role"
       ansible.builtin.include_role:
         name: pod
-      tags: integration, preproduction, production, review
+      tags: integration, preproduction, production, review, reset

@@ -1,5 +1,6 @@
 ---
 ansible_python_interpreter: /usr/bin/python3.12
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 
 CI_REGISTRY: "{{ lookup('env', 'CI_REGISTRY') }}"
 CI_REGISTRY_USER: "{{ lookup('env', 'CI_REGISTRY_USER') }}"
