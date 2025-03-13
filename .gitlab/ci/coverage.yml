@@ -98,10 +98,13 @@ serve-coverage-report-review:
 
 stop-review-coverage:
   stage: coverage
+  image: ${CI_REGISTRY_IMAGE}:ansible-${TAG}
   variables:
     TAG: $CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
+  script:
+    - ansible-playbook site.yml --tags coverage-reset
   environment:
     name: review/$TAG
     action: stop
