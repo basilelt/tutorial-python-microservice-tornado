@@ -3,7 +3,7 @@
 
 - name: Import config task
   ansible.builtin.import_tasks: config.yml
-  tags: coverage
+  tags: coverage, coverage-production, coverage-reset
 
 - name: Import deploy task
   ansible.builtin.import_tasks: deploy.yml
@@ -23,7 +23,7 @@
 
 - name: Import service task
   ansible.builtin.import_tasks: service.yml
-  tags: coverage
+  tags: coverage, coverage-production
 
 - name: Import reset task
   ansible.builtin.import_tasks: reset.yml
