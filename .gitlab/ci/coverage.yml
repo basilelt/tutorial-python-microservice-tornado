@@ -118,7 +118,7 @@ serve-coverage-report-review:
     - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage
   environment:
-    name: review/$TAG
+    name: review/$TAG/coverage
     url: http://coverage.$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
     on_stop: stop-review-coverage
 
@@ -135,6 +135,6 @@ stop-review-coverage:
     - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage-reset
   environment:
-    name: review/$TAG
+    name: review/$TAG/coverage
     action: stop
   when: manual
