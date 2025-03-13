@@ -1,0 +1,33 @@
+---
+- name: Delete Ingress for the application
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: "~/.kube/config"
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: coverage-ingress-{{ CI_ENVIRONMENT_SLUG }}
+        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+
+- name: Delete Service for the application
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: "~/.kube/config"
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: coverage-service-{{ CI_ENVIRONMENT_SLUG }}
+        namespace: "{{ CI_ENVIRONMENT_SLUG }}"
+
+- name: Delete Deployment for the application
+  kubernetes.core.k8s:
+    state: absent
+    kubeconfig: "~/.kube/config"
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: coverage-deployment-{{ CI_ENVIRONMENT_SLUG }}
+        namespace: "{{ CI_ENVIRONMENT_SLUG }}"

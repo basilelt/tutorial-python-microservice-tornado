@@ -24,3 +24,7 @@
 - name: Import service task
   ansible.builtin.import_tasks: service.yml
   tags: integration, preproduction, production, review
+
+- name: Import reset task
+  ansible.builtin.import_tasks: reset.yml
+  tags: reset
