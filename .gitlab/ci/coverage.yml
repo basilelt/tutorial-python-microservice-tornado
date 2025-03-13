@@ -45,7 +45,6 @@ serve-coverage-report-production:
   needs:
     - build-coverage-image
   variables:
-    GIT_STRATEGY: none
     TAG: $CI_COMMIT_TAG
   rules:
     - if: '$CI_COMMIT_TAG' 
@@ -62,7 +61,6 @@ serve-coverage-report:
   needs:
     - build-coverage-image
   variables:
-    GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
     URL: http://coverage.$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   rules:
