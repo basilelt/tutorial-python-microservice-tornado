@@ -70,9 +70,9 @@ serve-coverage-report-production:
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - chmod -R 755 .gitlab/ansible
   script:
-    - cd ./gitlab/ansible
+    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage-production
   environment:
     name: production/coverage
@@ -94,9 +94,9 @@ serve-coverage-report:
       variables:
         ENVIRONMENT: preproduction
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - chmod -R 755 .gitlab/ansible
   script:
-    - cd ./gitlab/ansible
+    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage
   environment:
     name: $ENVIRONMENT/coverage
@@ -113,9 +113,9 @@ serve-coverage-report-review:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - chmod -R 755 .gitlab/ansible
   script:
-    - cd ./gitlab/ansible
+    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage
   environment:
     name: review/$TAG
@@ -130,9 +130,9 @@ stop-review-coverage:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^feat-/'
   before_script:
-    - chmod -R 755 ./gitlab/ansible
+    - chmod -R 755 .gitlab/ansible
   script:
-    - cd ./gitlab/ansible
+    - cd .gitlab/ansible
     - ansible-playbook site.yml --tags coverage-reset
   environment:
     name: review/$TAG
