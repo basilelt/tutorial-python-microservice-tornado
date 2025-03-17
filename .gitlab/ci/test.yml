@@ -21,7 +21,9 @@ docker-security-scan:
 
 python-type-check:
   stage: test
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  image:
+    name: ${CI_REGISTRY_IMAGE}:${TAG}
+    pull_policy: always
   variables:
     GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
@@ -36,7 +38,9 @@ python-type-check:
 
 python-linter:
   stage: test
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  image:
+    name: ${CI_REGISTRY_IMAGE}:${TAG}
+    pull_policy: always
   variables:
     GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG
@@ -51,7 +55,9 @@ python-linter:
 
 python-unit-test:
   stage: test
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  image:
+    name: ${CI_REGISTRY_IMAGE}:${TAG}
+    pull_policy: always
   variables:
     GIT_STRATEGY: none
     TAG: $CI_COMMIT_REF_SLUG

@@ -1,6 +1,8 @@
 python-code-coverage:
   stage: coverage
-  image: ${CI_REGISTRY_IMAGE}:${TAG}
+  image:
+    name: ${CI_REGISTRY_IMAGE}:${TAG}
+    pull_policy: always
   variables:
     TAG: $CI_COMMIT_REF_SLUG
   rules:
