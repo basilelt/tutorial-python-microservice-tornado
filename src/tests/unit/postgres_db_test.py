@@ -12,14 +12,15 @@ from addrservice.database.db_engines import create_addressbook_db
 
 from tests.unit.addressbook_db_test import AbstractAddressBookDBTestCase
 
+
 class PostgresAddressBookDBTest(unittest.TestCase):
     def read_config(self, txt: str):
         with StringIO(txt) as f:
             cfg = yaml.load(f.read(), Loader=yaml.SafeLoader)
         return cfg
 
-    @unittest.skipIf('CI' in os.environ, 
-                    "Skipping PostgreSQL tests in CI environment")
+    @unittest.skipIf('CI' in os.environ,
+                     "Skipping PostgreSQL tests in CI environment")
     def test_postgres_db_config(self):
         cfg = self.read_config('''
 addr-db:
@@ -35,8 +36,9 @@ addr-db:
         db = create_addressbook_db(cfg['addr-db'])
         self.assertEqual(type(db), PostgresAddressBookDB)
 
-@unittest.skipIf('CI' in os.environ, 
-                "Skipping PostgreSQL tests in CI environment")
+
+@unittest.skipIf('CI' in os.environ,
+                 "Skipping PostgreSQL tests in CI environment")
 class PostgresAddressBookDBIntegrationTest(
     AbstractAddressBookDBTestCase,
     asynctest.TestCase
@@ -56,12 +58,12 @@ class PostgresAddressBookDBIntegrationTest(
     def addr_count(self) -> int:
         # This is approximate but works for tests
         count = 0
-        
+
         async def count_addresses():
             nonlocal count
             async for _ in self.pg_db.read_all_addresses():
                 count += 1
-        
+
         loop = asynctest.asyncio.get_event_loop()
         loop.run_until_complete(count_addresses())
         return count
@@ -69,6 +71,7 @@ class PostgresAddressBookDBIntegrationTest(
     def tearDown(self):
         self.pg_db.stop()
         super().tearDown()
+
 
 if __name__ == '__main__':
     unittest.main()

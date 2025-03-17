@@ -1,7 +1,7 @@
 # Copyright (c) 2020. All rights reserved.
 
 import asyncio
-import asyncpg
+import asyncpg  # type: ignore
 import json
 import uuid
 from typing import AsyncIterator, Dict, Tuple, Optional
@@ -9,11 +9,12 @@ from typing import AsyncIterator, Dict, Tuple, Optional
 from addrservice.datamodel import AddressEntry
 from addrservice.database.addressbook_db import AbstractAddressBookDB
 
+
 class PostgresAddressBookDB(AbstractAddressBookDB):
     def __init__(self, config: Dict):
         """
         Initialize PostgreSQL database connection with configuration.
-        
+
         Config should include:
         - host: database host
         - port: database port
@@ -33,7 +34,7 @@ class PostgresAddressBookDB(AbstractAddressBookDB):
                 password=self.config.get('password', ''),
                 database=self.config.get('database', 'addressbook')
             )
-            
+
             # Create table if it doesn't exist
             assert self.pool is not None
             async with self.pool.acquire() as conn:
@@ -89,7 +90,7 @@ class PostgresAddressBookDB(AbstractAddressBookDB):
                 'SELECT data FROM addresses WHERE nickname = $1',
                 nickname
             )
-            
+
             if row is None:
                 raise KeyError(nickname)
 
@@ -105,7 +106,7 @@ class PostgresAddressBookDB(AbstractAddressBookDB):
                 'UPDATE addresses SET data = $1 WHERE nickname = $2',
                 json.dumps(addr.to_api_dm()), nickname
             )
-            
+
             if result == "UPDATE 0":  # No rows updated
                 raise KeyError(nickname)
 
@@ -119,11 +120,13 @@ class PostgresAddressBookDB(AbstractAddressBookDB):
                 'DELETE FROM addresses WHERE nickname = $1',
                 nickname
             )
-            
+
             if result == "DELETE 0":  # No rows deleted
                 raise KeyError(nickname)
 
-    async def read_all_addresses(self) -> AsyncIterator[Tuple[str, AddressEntry]]:
+    async def read_all_addresses(
+        self
+    ) -> AsyncIterator[Tuple[str, AddressEntry]]:
         # Ensure pool is initialized
         await self._init_db()
         assert self.pool is not None
