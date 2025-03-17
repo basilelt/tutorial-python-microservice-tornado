@@ -14,7 +14,6 @@ from addrservice.datamodel import AddressEntry
 from tests.unit.addressbook_db_test import AbstractAddressBookDBTestCase
 from data import address_data_suite
 
-
 class PostgresAddressBookDBTest(unittest.TestCase):
     def read_config(self, txt: str):
         with StringIO(txt) as f:
@@ -36,7 +35,6 @@ addr-db:
         self.assertIn('postgres', cfg['addr-db'])
         db = create_addressbook_db(cfg['addr-db'])
         self.assertEqual(type(db), PostgresAddressBookDB)
-
 
 @unittest.skipIf('CI' in os.environ, "Skipping PostgreSQL tests in CI environment")
 class PostgresAddressBookDBIntegrationTest(
