@@ -625,3 +625,45 @@ TOTAL                                      517      7    112      5    98%
 ```
 
 ---
+
+## 5. Database Integration
+
+This project supports multiple database backends:
+
+1. In-memory database (for testing)
+2. File-system database (for development)
+3. PostgreSQL database (for production)
+
+### PostgreSQL Setup
+
+To use PostgreSQL with this application:
+
+1. Install PostgreSQL and create a database:
+
+```bash
+# Install PostgreSQL (Ubuntu/Debian)
+$ sudo apt-get update
+$ sudo apt-get install postgresql postgresql-contrib
+
+# Or on macOS with Homebrew:
+$ brew install postgresql
+
+# Create a database
+$ createdb addressbook
+```
+
+2. Run the application with PostgreSQL configuration:
+
+```bash
+$ python3 addrservice/tornado/server.py --port 8080 --config ./configs/addressbook-postgres.yaml
+```
+
+3. For running tests with PostgreSQL:
+
+```bash
+# Create test database
+$ createdb addressbook_test
+
+# Run tests with PostgreSQL environment variables
+$ PG_DATABASE=addressbook_test python3 -m unittest tests/unit/postgres_db_test.py
+```

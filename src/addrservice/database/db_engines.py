@@ -5,6 +5,7 @@ from typing import Dict
 from addrservice.database.addressbook_db import (
     AbstractAddressBookDB, InMemoryAddressBookDB, FilesystemAddressBookDB
 )
+from addrservice.database.postgres_db import PostgresAddressBookDB
 
 
 def create_addressbook_db(addr_db_config: Dict) -> AbstractAddressBookDB:
@@ -14,4 +15,5 @@ def create_addressbook_db(addr_db_config: Dict) -> AbstractAddressBookDB:
     return {
         'memory': lambda cfg: InMemoryAddressBookDB(),
         'fs': lambda cfg: FilesystemAddressBookDB(cfg),
+        'postgres': lambda cfg: PostgresAddressBookDB(cfg),
     }[db_type](db_config)
