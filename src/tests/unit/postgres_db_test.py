@@ -12,7 +12,6 @@ from addrservice.database.db_engines import create_addressbook_db
 
 from tests.unit.addressbook_db_test import AbstractAddressBookDBTestCase
 
-
 class PostgresAddressBookDBTest(unittest.TestCase):
     def read_config(self, txt: str):
         with StringIO(txt) as f:
@@ -20,7 +19,7 @@ class PostgresAddressBookDBTest(unittest.TestCase):
         return cfg
 
     @unittest.skipIf('CI' in os.environ, 
-                     "Skipping PostgreSQL tests in CI environment")
+                    "Skipping PostgreSQL tests in CI environment")
     def test_postgres_db_config(self):
         cfg = self.read_config('''
 addr-db:
@@ -36,8 +35,8 @@ addr-db:
         db = create_addressbook_db(cfg['addr-db'])
         self.assertEqual(type(db), PostgresAddressBookDB)
 
-
-@unittest.skipIf('CI' in os.environ, "Skipping PostgreSQL tests in CI environment")
+@unittest.skipIf('CI' in os.environ, 
+                "Skipping PostgreSQL tests in CI environment")
 class PostgresAddressBookDBIntegrationTest(
     AbstractAddressBookDBTestCase,
     asynctest.TestCase
@@ -70,7 +69,6 @@ class PostgresAddressBookDBIntegrationTest(
     def tearDown(self):
         self.pg_db.stop()
         super().tearDown()
-
 
 if __name__ == '__main__':
     unittest.main()
