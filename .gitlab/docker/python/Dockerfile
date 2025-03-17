@@ -1,5 +1,6 @@
 FROM python:3.8-alpine
 
+RUN mkdir /app-python
 WORKDIR /app-python
 
 COPY src /app-python
