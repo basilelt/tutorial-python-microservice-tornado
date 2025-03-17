@@ -9,10 +9,9 @@ import os
 from addrservice.database.addressbook_db import AbstractAddressBookDB
 from addrservice.database.postgres_db import PostgresAddressBookDB
 from addrservice.database.db_engines import create_addressbook_db
-from addrservice.datamodel import AddressEntry
 
 from tests.unit.addressbook_db_test import AbstractAddressBookDBTestCase
-from data import address_data_suite
+
 
 class PostgresAddressBookDBTest(unittest.TestCase):
     def read_config(self, txt: str):
@@ -20,7 +19,8 @@ class PostgresAddressBookDBTest(unittest.TestCase):
             cfg = yaml.load(f.read(), Loader=yaml.SafeLoader)
         return cfg
 
-    @unittest.skipIf('CI' in os.environ, "Skipping PostgreSQL tests in CI environment")
+    @unittest.skipIf('CI' in os.environ, 
+                     "Skipping PostgreSQL tests in CI environment")
     def test_postgres_db_config(self):
         cfg = self.read_config('''
 addr-db:
@@ -35,6 +35,7 @@ addr-db:
         self.assertIn('postgres', cfg['addr-db'])
         db = create_addressbook_db(cfg['addr-db'])
         self.assertEqual(type(db), PostgresAddressBookDB)
+
 
 @unittest.skipIf('CI' in os.environ, "Skipping PostgreSQL tests in CI environment")
 class PostgresAddressBookDBIntegrationTest(
@@ -56,6 +57,7 @@ class PostgresAddressBookDBIntegrationTest(
     def addr_count(self) -> int:
         # This is approximate but works for tests
         count = 0
+        
         async def count_addresses():
             nonlocal count
             async for _ in self.pg_db.read_all_addresses():
