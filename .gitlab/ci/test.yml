@@ -31,7 +31,7 @@ python-type-check:
       variables:  
         TAG: $CI_COMMIT_TAG
   script:
-    - cd /app
+    - cd /app-python
     - mypy ./addrservice ./tests
 
 python-linter:
@@ -46,7 +46,7 @@ python-linter:
       variables:  
         TAG: $CI_COMMIT_TAG
   script:
-    - cd /app
+    - cd /app-python
     - flake8 ./addrservice ./tests
 
 python-unit-test:
@@ -61,5 +61,5 @@ python-unit-test:
       variables:  
         TAG: $CI_COMMIT_TAG
   script:
-    - cd /app
+    - cd /app-python
     - python -m unittest discover tests -p '*_test.py'

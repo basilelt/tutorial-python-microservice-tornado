@@ -1,8 +1,8 @@
 FROM python:3.8-alpine
 
-WORKDIR /app
+WORKDIR /app-python
 
-COPY src /app
+COPY src /app-python
 
 # Install any needed packages specified in requirements.txt
 RUN apk add --no-cache gcc=13.2.1_git20240309-r1 musl-dev=1.2.5-r1 && \
